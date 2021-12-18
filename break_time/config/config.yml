@@ -1,8 +1,6 @@
 REP_BASED_ACTIVITIES:
-  - squats 
+  - squats
   - push-ups
 TIME_BASED_ACTIVITIES:
   - walk
   - run
-ALERT_FILE:
-  - metal_gear_alert.mp3
