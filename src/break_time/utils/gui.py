@@ -1,57 +1,35 @@
+import json
 import tkinter as tk
 from tkinter import ttk
-import pkg_resources
-import json
 
-from utils.activity import new_alert
+import pkg_resources
+
+from .activity import new_alert
 
 
 class BreakTime(object):
-    def __init__(self):
+    def __init__(self, log):
+        self.log = log
         self.window = tk.Tk()  # Main/Root Tk window
         # Configure root window
         self.window.title("BreakTime")
         self.window.rowconfigure(0, minsize=50, weight=1)
         self.window.columnconfigure([0, 1, 2], minsize=50, weight=1)
 
-        self.config = self._load_config()  # Stores the configuration data
-        self.counter_is_active = False  # Decide if counter is active of not
-        self.counter = self.config.get("interval")
-        print(f"Timer initiated to {self.counter}")
+        self.config = self._load_config()  # Load the configuration data
+        self.counter_is_active = False  # Decide if counter is active or not
+        self.counter = self.config.get("interval")  # Interval Minutes
+        self.log.info(f"Timer interval initiated to {self.counter} minutes")
 
-        # On and Off mages for the auto start button
+        # On and Off images for the auto start button
         self.ON_IMG = tk.PhotoImage(
-            file=pkg_resources.resource_filename(__name__, "../data/image/on.png")
+            file=pkg_resources.resource_filename(__name__, "../static/image/on.png")
         )
         self.OFF_IMG = tk.PhotoImage(
-            file=pkg_resources.resource_filename(__name__, "../data/image/off.png")
+            file=pkg_resources.resource_filename(__name__, "../static/image/off.png")
         )
 
-        self.intervals = [
-            10,
-            15,
-            20,
-            25,
-            30,
-            35,
-            40,
-            45,
-            50,
-            55,
-            60,
-            65,
-            70,
-            75,
-            80,
-            85,
-            90,
-            95,
-            100,
-            105,
-            110,
-            115,
-            120,
-        ]
+        self.intervals = list(range(5, 125, 5))
         self.style = ttk.Style()
 
         self.messagebox_is_active = False
@@ -61,12 +39,13 @@ class BreakTime(object):
 
     def run(self):
         """Run the application"""
+        # Automatically, start the timer is 'auto-start' configured.
         if self.config.get("auto-start"):
             self._start()
 
         self.window.mainloop()
 
-    def create_widgets(self):
+    def create_widgets(self) -> None:
         # I am using a 3 column grid design. Thus a function to create the grid
         # for each column
         grid_left = self._create_left_grid(master_frame=self.window)  # Col 0
@@ -79,7 +58,7 @@ class BreakTime(object):
         grid_middle.grid(row=0, column=1, padx=10, pady=10)
         grid_right.grid(row=0, column=2, padx=10, pady=10)
 
-    def _create_left_grid(self, master_frame):
+    def _create_left_grid(self, master_frame) -> tk.Frame:
         """Create the grid for the left column
 
         Parameters
@@ -129,7 +108,7 @@ class BreakTime(object):
 
         return btn_frame
 
-    def _create_middle_grid(self, master_frame):
+    def _create_middle_grid(self, master_frame) -> tk.Frame:
         """Create a frame for the middle column
 
         Parameters
@@ -150,9 +129,13 @@ class BreakTime(object):
 
         variable = tk.IntVar(master=counter_frame)
         lbl_interval = ttk.OptionMenu(
-            interval_frame, variable, *self.intervals, command=self._set_interval
+            interval_frame,
+            variable,
+            str(self.counter),
+            *map(str, self.intervals),
+            command=self._set_interval,
         )
-        variable.set(self.config.get("interval"))
+        # variable.set(self.config.get("interval"))
         lbl_interval.grid(row=0, column=0)
         lbl_unit = tk.Label(
             master=interval_frame, text="minutes", font=("Helvetica", 10)
@@ -161,7 +144,7 @@ class BreakTime(object):
 
         self.lbl_counter_ = tk.Label(
             master=counter_frame,
-            text=self.counter,
+            text=str(self.counter),
             fg="red",
             font=("Helvetica", 70),
             relief="ridge",
@@ -171,7 +154,7 @@ class BreakTime(object):
 
         return counter_frame
 
-    def _create_right_grid(self, master_frame):
+    def _create_right_grid(self, master_frame) -> tk.Frame:
         """Create a frame for the right column
 
         Parameters
@@ -195,7 +178,7 @@ class BreakTime(object):
 
         return config_frame
 
-    def _load_audio_files(self, master_frame):
+    def _load_audio_files(self, master_frame) -> None:
         """Load the audio files and create RadioButton selection(s) in the master_frame
 
         Parameters
@@ -206,11 +189,11 @@ class BreakTime(object):
 
         def _update_audio_config():
             choice = v.get()
-            print(f"Updating audio config to {choice}")
+            self.log.info(f"Updating audio config to {choice}")
             self.config["default-audio"] = choice
 
         v = tk.StringVar()
-        files = pkg_resources.resource_listdir(__name__, "../data/sound")
+        files = pkg_resources.resource_listdir(__name__, "../static/sound")
         if not files:
             raise FileNotFoundError("No Audio file(s) found...")
         for value in files:
@@ -224,32 +207,32 @@ class BreakTime(object):
             x.grid(sticky="W")
             # set default value
             if value == self.config.get("default-audio"):
-                print(f"Default audio is {value}")
+                self.log.info(f"Default audio is {value}")
                 v.set(value)
 
-    def _update_auto_start_button(self):
+    def _update_auto_start_button(self) -> None:
         """Checks and updates auto start button"""
         if self.config.get("auto-start"):
             self.btn_auto_start_.config(image=self.OFF_IMG)
             self.lbl_auto_start_.config(fg="red")
-            print("Setting Auto-Start to False")
+            self.log.info("Setting Auto-Start to False")
             self.config["auto-start"] = False
         else:
             self.btn_auto_start_.config(image=self.ON_IMG)
             self.lbl_auto_start_.config(fg="green")
-            print("Setting Auto-Start to True")
+            self.log.info("Setting Auto-Start to True")
             self.config["auto-start"] = True
 
-    def _count_down(self):
+    def _count_down(self) -> None:
         """Start the countdown timer"""
-        time_delta = 1000  # every second
+        time_delta = 60000  # every minute
         if self.counter_is_active:
             self.lbl_counter_["text"] = str(self.counter)
             self.counter -= 1
             if self.counter < 0:
                 # make alert
                 if self.messagebox_is_active:
-                    print("Activity box already active, skipping....")
+                    self.log.info("Activity box already active, skipping....")
                 else:
                     self.messagebox_is_active = True
                     # Make the alert and reset active state
@@ -257,42 +240,41 @@ class BreakTime(object):
                     self.messagebox_is_active = False
                 # Reset Counter
                 self.counter = self.config.get("interval")
+                self.lbl_counter_["text"] = str(self.counter)
             self.window.after(time_delta, self._count_down)
 
-    def _start(self):
+    def _start(self) -> None:
         """Start the countdown timer"""
         self.counter_is_active = True
         self.counter = self.config.get("interval")
         self._count_down()
 
-    def _stop(self):
+    def _stop(self) -> None:
         """Stop the countdown timer"""
         self.counter_is_active = False
 
-    def _continue(
-        self,
-    ):
-        """Continue the countdown timer from where it last stopped"""
+    def _continue(self) -> None:
+        """Continue the countdown timer from where it was last stopped"""
         self.counter_is_active = True
         self._count_down()
 
-    def _set_interval(self, *args):
-        print(f"Updating interval to {args[0]}")
+    def _set_interval(self, *args) -> None:
+        self.log.info(f"Updating interval to {args[0]}")
         self.config["interval"] = args[0]
         self.lbl_counter_["text"] = str(args[0])
 
-    def _load_config(self):
+    def _load_config(self) -> dict:
         """Function to read in configuration and initialize counter"""
         with open(
-            pkg_resources.resource_filename(__name__, "config/break_time.json"), "r"
+            pkg_resources.resource_filename(__name__, "../config/break_time.json"), "r"
         ) as cfg_file:
             config_data = json.load(cfg_file)
         return config_data
 
-    def _update_config(self):
+    def _update_config(self) -> None:
         """Update the configuration data"""
-        print("updating config file...")
+        self.log.info("updating config file...")
         with open(
-            pkg_resources.resource_filename(__name__, "config/break_time.json"), "w"
+            pkg_resources.resource_filename(__name__, "../config/break_time.json"), "w"
         ) as cfg_file:
             json.dump(self.config, cfg_file)

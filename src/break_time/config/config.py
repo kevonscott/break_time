@@ -1,6 +1,5 @@
-import yaml
 import pkg_resources
-
+import yaml
 
 with open(pkg_resources.resource_filename(__name__, "config.yml"), "r") as yaml_file:
     cfg = yaml.safe_load(yaml_file)

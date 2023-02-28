@@ -1,9 +1,9 @@
 import random
-from sound.sound import Sound
 
 from __init__ import logger
-from message_box import MessageBox
 from config.config import ACTIVITIES, REP_COUNT
+from message_box import MessageBox
+from sound.sound import Sound
 
 
 def new_alert(audio_filename):

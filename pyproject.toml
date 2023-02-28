@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "break_time"
+version = "0.0.1"
+authors = [
+  { name="Kevon Scott", email="kevon-dev@outlook.com" },
+]
+description = "Simple program to alert users to take breaks."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/kevonscott/break_time"
+"Bug Tracker" = "https://github.com/kevonscott/break_time/issues"
