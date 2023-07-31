@@ -1,4 +1,4 @@
-flake8==6.0.0
+flake8==6.1.0
 mypy==1.4.1
 ###### Requirements ######
 playsound==1.3.0
