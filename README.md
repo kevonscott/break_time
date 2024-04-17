@@ -13,6 +13,7 @@ BreakTime was inspired by
 
 ## Future Improvements
 
-* Build app into exe so it can be installed on windows computers
-* Create Linux/Unix version of the application
-* Write tests
+- [ ] Build app into exe so it can be installed on windows computers
+- [ ] Write unit and integration tests
+- [ ] Add seconds to countdown clock
+- [x] Use a more modern GUI framework, customtkinter, QT etc...

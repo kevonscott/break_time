@@ -11,4 +11,4 @@ from utils.gui import BreakTime
 if __name__ == "__main__":
     logger.info(" Launching BreakTime...")
     breaktime = BreakTime(log=logger)
-    breaktime.run()
+    breaktime.launch()

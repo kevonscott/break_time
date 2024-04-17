@@ -1,7 +1,8 @@
-import pkg_resources
+from pathlib import Path
+
 import yaml
 
-with open(pkg_resources.resource_filename(__name__, "config.yml"), "r") as yaml_file:
+with open((Path(__file__).parent / "config.yml"), "r") as yaml_file:
     cfg = yaml.safe_load(yaml_file)
 
 REP_BASED_ACTIVITIES = cfg["REP_BASED_ACTIVITIES"]

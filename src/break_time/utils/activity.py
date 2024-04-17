@@ -1,16 +1,18 @@
-import random
+from random import SystemRandom
 
 from __init__ import logger
 from config.config import ACTIVITIES, REP_COUNT
 from message_box import MessageBox
 from sound.sound import Sound
 
+_CRYPTOGEN = SystemRandom()
+
 
 def new_alert(audio_filename):
     logger.info("Randomly selecting break Activity and Duration or Rep...")
-    random_reps = random.choice(REP_COUNT)  # Choose a random number of reps/munutes
-    random_activity_type = random.choice(list(ACTIVITIES.keys()))
-    random_activity = random.choice(ACTIVITIES[random_activity_type][0])
+    random_reps = _CRYPTOGEN.choice(REP_COUNT)  # Choose a random number of reps/minutes
+    random_activity_type = _CRYPTOGEN.choice(list(ACTIVITIES.keys()))
+    random_activity = _CRYPTOGEN.choice(ACTIVITIES[random_activity_type][0])
     rep_unit = ACTIVITIES[random_activity_type][1]
     logger.info(f"\n Activity: {random_activity} \n Duration or Rep: {random_reps}")
     message = f"{random_reps} {rep_unit} {random_activity}"
