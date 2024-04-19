@@ -5,7 +5,7 @@ import customtkinter as ctk
 from PIL import Image
 
 from .activity import new_alert
-from .util import load_config, update_config
+from .util import load_audio_files, load_config, update_config
 
 CONFIG: dict = load_config()
 
@@ -163,6 +163,7 @@ class OptionsFrame(ctk.CTkFrame):
         theme_option_label = ctk.CTkLabel(self, text="Theme")
         theme_option_label.grid(row=0, column=0, padx=2, pady=2)
 
+        # Label for sound_option_menu
         sound_option_label = ctk.CTkLabel(self, text="Alert Sound")
         sound_option_label.grid(row=1, column=0, padx=2, pady=2)
 
@@ -176,7 +177,7 @@ class OptionsFrame(ctk.CTkFrame):
         default_audio = ctk.StringVar(value=CONFIG["default-audio"])
         sound_option_menu = ctk.CTkOptionMenu(
             self,
-            values=self._load_audio_files(),
+            values=load_audio_files(),
             command=self._set_audio,
             variable=default_audio,
         )
@@ -194,12 +195,3 @@ class OptionsFrame(ctk.CTkFrame):
         """Update the configuration data."""
         self.log.info(" updating config...")
         update_config(CONFIG)
-
-    def _load_audio_files(self) -> list[str]:
-        """Load the audio files and create RadioButton selection(s)."""
-        audio_assets_path = Path(__file__).parent.parent / "static/audio"
-        if not audio_assets_path.exists():
-            raise FileNotFoundError(
-                f"Could not locate audio assets directory: {audio_assets_path}"
-            )
-        return [f.name for f in audio_assets_path.iterdir()]

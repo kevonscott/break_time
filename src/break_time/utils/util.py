@@ -17,3 +17,13 @@ def update_config(config: dict) -> None:
 
     with open(CONFIG_FILE, "w") as cfg_file:
         json.dump(current_config, cfg_file)
+
+
+def load_audio_files() -> list[str]:
+    """Load the audio files."""
+    audio_assets_path = Path(__file__).parent.parent / "static/audio"
+    if not audio_assets_path.exists():
+        raise FileNotFoundError(
+            f"Could not locate audio assets directory: {audio_assets_path}"
+        )
+    return [f.name for f in audio_assets_path.iterdir()]
