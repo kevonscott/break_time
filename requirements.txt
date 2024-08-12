@@ -4,5 +4,5 @@ mypy==1.11.0
 ###### Requirements ######
 playsound==1.2.2
 pre-commit==3.8.0
-PyYAML==6.0.1
+PyYAML==6.0.2
 pillow==10.3.0
