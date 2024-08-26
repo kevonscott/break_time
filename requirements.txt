@@ -1,6 +1,6 @@
 customtkinter==5.2.2
 flake8==7.1.1
-mypy==1.11.1
+mypy==1.11.2
 ###### Requirements ######
 playsound==1.2.2
 pre-commit==3.8.0
