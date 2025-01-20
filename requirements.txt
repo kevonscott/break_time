@@ -3,6 +3,6 @@ flake8==7.1.1
 mypy==1.14.1
 ###### Requirements ######
 playsound==1.2.2
-pre-commit==4.0.1
+pre-commit==4.1.0
 PyYAML==6.0.2
 pillow==11.0.0
