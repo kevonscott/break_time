@@ -1,5 +1,5 @@
 customtkinter==5.2.2
-flake8==7.2.0
+flake8==7.3.0
 mypy==1.16.1
 ###### Requirements ######
 playsound==1.2.2
