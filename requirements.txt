@@ -5,4 +5,4 @@ mypy==2.1.0
 playsound==1.2.2
 pre-commit==4.6.0
 PyYAML==6.0.3
-pillow==12.2.0
+pillow==12.3.0
